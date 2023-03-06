@@ -14,5 +14,22 @@ class Friend:
     @classmethod
     def save(cls, data):
         query = """INSERT INTO friends (first_name, last_name, occupation, created_at, updated_at)
-                VALUES (%(fname)s, %(lname)s, %(occ)s, NOW(), NOW())"""
+                VALUES (%(fname)s, %(lname)s, %(occ)s, NOW(), NOW());"""
         return connectToMySQL(cls.DB).query_db(query, data)
+    
+    #READ
+    @classmethod
+    def get_all(cls): #retrieves all rows of the table
+        query = "SELECT * FROM friends;"
+        results = connectToMySQL(cls.DB).query_db(query)
+        friends = []
+        for friend in results:
+            friends.append (cls(friend))
+        return friends
+    
+    @classmethod
+    def get_one(cls, friend_id): #retrieves one row of the table
+        query = "SELECT * FROM friends WHERE id = %(id)s;"
+        data = {'id': friend_id}
+        results = connectToMySQL(cls.DB).query_db(query, data)
+        return cls(results[0])
