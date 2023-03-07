@@ -33,3 +33,23 @@ class Friend:
         data = {'id': friend_id}
         results = connectToMySQL(cls.DB).query_db(query, data)
         return cls(results[0])
+    
+    # UPDATE
+    @classmethod
+    def update(cls, data):
+        query = """
+                UPDATE friends 
+                SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s
+                WHERE id = %(id)s;
+                """
+        return connectToMySQL(cls.DB).query_db(query, data)
+
+    # DELETE
+    @classmethod
+    def delete(cls, friend_id):
+        query = """
+                DELETE FROM friends
+                WHERE id = %(id)s;
+                """
+        data = {"id": friend_id}
+        return connectToMySQL(cls.DB).query_db(query, data)
